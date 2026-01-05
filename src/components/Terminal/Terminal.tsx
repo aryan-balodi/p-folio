@@ -7,8 +7,12 @@ import { TerminalInteractiveProvider } from "@/context/TerminalInteractiveContex
 import { ActiveProjectCard } from "./ActiveProjectCard";
 import { AnimatePresence } from "framer-motion";
 
-const TerminalContent = () => {
-    const { history, executeCommand } = useTerminal();
+interface TerminalContentProps {
+    onExit?: () => void;
+}
+
+const TerminalContent = ({ onExit }: TerminalContentProps) => {
+    const { history, executeCommand, cwd } = useTerminal(onExit);
     const bottomRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -76,7 +80,7 @@ const TerminalContent = () => {
                 </div>
 
                 <History history={history} />
-                <Input onSubmit={executeCommand} />
+                <Input onSubmit={executeCommand} cwd={cwd} />
 
                 <div ref={bottomRef} />
             </div>
@@ -84,10 +88,11 @@ const TerminalContent = () => {
     );
 };
 
-export const Terminal = () => {
+
+export const Terminal = ({ onExit }: { onExit?: () => void }) => {
     return (
         <TerminalInteractiveProvider>
-            <TerminalContent />
+            <TerminalContent onExit={onExit} />
         </TerminalInteractiveProvider>
     );
 };
