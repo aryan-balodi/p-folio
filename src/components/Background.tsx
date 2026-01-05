@@ -9,12 +9,29 @@ export const Background = () => {
                 <div className="absolute bottom-1/4 left-1/3 w-36 h-36 bg-emerald-500/40 rounded-full blur-[50px] animate-float" />
             </div>
 
-            {/* Grid Pattern */}
+            {/* Noise Texture Background */}
+            <div className="absolute inset-0 opacity-[0.4] mix-blend-soft-light pointer-events-none">
+                <svg className="h-full w-full">
+                    <filter id="bgNoiseFilter">
+                        <feTurbulence
+                            type="fractalNoise"
+                            baseFrequency="0.65"
+                            numOctaves="3"
+                            stitchTiles="stitch"
+                        />
+                    </filter>
+                    <rect width="100%" height="100%" filter="url(#bgNoiseFilter)" />
+                </svg>
+            </div>
+
+            {/* Micro-Grid Overlay with Center Mask */}
             <div
-                className="absolute inset-0 opacity-[0.1]"
+                className="absolute inset-0 pointer-events-none opacity-[0.15] dark:opacity-[0.2]"
                 style={{
                     backgroundImage: `linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px)`,
-                    backgroundSize: '40px 40px'
+                    backgroundSize: '20px 20px',
+                    maskImage: 'radial-gradient(circle at center, transparent 25%, black 85%)',
+                    WebkitMaskImage: 'radial-gradient(circle at center, transparent 25%, black 85%)'
                 }}
             />
         </div>

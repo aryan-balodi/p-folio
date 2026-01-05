@@ -1,261 +1,387 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Mail, ExternalLink, ArrowUpRight } from "lucide-react";
+import { Github, Mail, ExternalLink, Linkedin, Twitter, Home, FolderCode, User, Sun, Moon } from "lucide-react";
+import { ExpandableTabs } from "@/components/ui/expandable-tabs";
+import { useState, useEffect } from "react";
+
+const experiences = [
+    {
+        company: "Quantum Systems",
+        role: "Senior Systems Engineer",
+        period: "2023 - Present",
+        description: "Architecting distributed microservices and optimizing high-throughput data pipelines using Rust and Kubernetes.",
+        tech: ["rust", "grpc", "k8s", "redis"]
+    },
+    {
+        company: "Stellar Labs",
+        role: "Full Stack Developer",
+        period: "2021 - 2023",
+        description: "Developed collaborative real-time editing tools and improved frontend performance by 40%.",
+        tech: ["next.js", "typescript", "websocket", "postgresql"]
+    }
+];
 
 const projects = [
     {
         title: "CLI Portfolio",
-        year: "2025",
         description: "A high-performance, terminal-emulated portfolio website built with Next.js 14, Framer Motion, and Tailwind CSS.",
-        tech: ["React", "Next.js", "TypeScript", "Tailwind"],
+        tech: ["react", "next.js", "typescript", "tailwind"],
         link: "https://github.com/balodi/portfolio-latest",
-        image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop"
+        date: "jan 2025",
+        featured: true
     },
     {
         title: "Neural Net Viz",
-        year: "2024",
         description: "Interactive 3D visualization of neural network training processes.",
-        tech: ["D3.js", "Three.js", "Python", "TensorFlow"],
+        tech: ["d3.js", "three.js", "python", "tensorflow"],
         link: "https://github.com/balodi",
-        image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1000&auto=format&fit=crop"
+        date: "dec 2024"
     },
     {
         title: "E-Commerce Engine",
-        year: "2023",
         description: "Headless e-commerce backend built with Rust and Rocket.",
-        tech: ["Rust", "PostgreSQL", "Redis", "Docker"],
+        tech: ["rust", "postgresql", "redis", "docker"],
         link: "https://github.com/balodi",
-        image: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=1000&auto=format&fit=crop"
+        date: "aug 2023"
     }
 ];
 
+const BinaryDivider = ({ className = "my-2" }: { className?: string }) => (
+    <div className={`relative h-5 overflow-hidden ${className}`}>
+        {/* Background line */}
+        <div className="absolute inset-0 flex items-center">
+            <div className="flex-1 h-px bg-white/5" />
+        </div>
+        {/* Scrolling Binary Marquee */}
+        <div className="absolute inset-0 flex items-center overflow-hidden">
+            <div
+                className="flex font-mono text-[9px] text-green-600/80 dark:text-green-400/80 whitespace-nowrap animate-marquee tracking-tight"
+            >
+                {Array.from({ length: 16 }).map((_, blockIdx) => (
+                    <span key={blockIdx} className="flex items-center">
+                        {Array.from({ length: 8 }).map((_, digitIdx) => (
+                            <span
+                                key={digitIdx}
+                                className="inline-block"
+                                style={{
+                                    animation: `binaryFlicker ${0.05 + Math.random() * 0.15}s steps(1) infinite`,
+                                    animationDelay: `${Math.random() * 0.3}s`
+                                }}
+                            >
+                                {Math.random() > 0.5 ? '1' : '0'}
+                            </span>
+                        ))}
+                        <span className="text-muted-foreground/20 mx-1">/</span>
+                    </span>
+                ))}
+            </div>
+            <div
+                className="flex font-mono text-[9px] text-green-600/80 dark:text-green-400/80 whitespace-nowrap animate-marquee tracking-tight"
+            >
+                {Array.from({ length: 16 }).map((_, blockIdx) => (
+                    <span key={blockIdx} className="flex items-center">
+                        {Array.from({ length: 8 }).map((_, digitIdx) => (
+                            <span
+                                key={digitIdx}
+                                className="inline-block"
+                                style={{
+                                    animation: `binaryFlicker ${0.05 + Math.random() * 0.15}s steps(1) infinite`,
+                                    animationDelay: `${Math.random() * 0.3}s`
+                                }}
+                            >
+                                {Math.random() > 0.5 ? '1' : '0'}
+                            </span>
+                        ))}
+                        <span className="text-muted-foreground/20 mx-1">/</span>
+                    </span>
+                ))}
+            </div>
+        </div>
+    </div>
+);
+
 export const Portfolio = () => {
+    const [isDarkMode, setIsDarkMode] = useState(true);
+
+    useEffect(() => {
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [isDarkMode]);
+
+    const tabs: any[] = [
+        { title: "Home", icon: Home },
+        { title: "Contact", icon: Mail },
+        { type: "separator" },
+        { title: "Github", icon: Github, link: "https://github.com" },
+        { title: "LinkedIn", icon: Linkedin, link: "https://linkedin.com" },
+        { type: "separator" },
+        { title: isDarkMode ? "Light Mode" : "Dark Mode", icon: isDarkMode ? Sun : Moon, action: "toggleTheme" },
+    ];
+
+    const handleTabChange = (index: number | null) => {
+        if (index === null) return;
+
+        const tab = tabs[index];
+        if (tab.type === "separator") return;
+
+        if (tab.action === "toggleTheme") {
+            setIsDarkMode(!isDarkMode);
+            return;
+        }
+
+        if (tab.link) {
+            window.open(tab.link, "_blank", "noopener,noreferrer");
+            return;
+        }
+
+        const sectionMap: { [key: string]: string } = {
+            "Home": "top",
+            "Contact": "contact"
+        };
+
+        const sectionId = sectionMap[tab.title];
+
+        if (sectionId === 'top') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else if (sectionId) {
+            const element = document.getElementById(sectionId);
+            element?.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     return (
-        <div className="min-h-screen w-full bg-black text-white overflow-y-auto relative">
-            {/* Grid Pattern Background */}
-            <div className="fixed inset-0 opacity-[0.03] pointer-events-none">
-                <div className="absolute inset-0" style={{
-                    backgroundImage: `
-                        linear-gradient(rgba(34, 197, 94, 0.1) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(34, 197, 94, 0.1) 1px, transparent 1px)
-                    `,
-                    backgroundSize: '50px 50px'
-                }} />
+        <div className="min-h-screen w-full bg-background text-foreground overflow-y-auto relative font-sans scroll-smooth transition-colors duration-300">
+            {/* Noise Texture Background */}
+            <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.4] mix-blend-soft-light dark:opacity-[0.3]">
+                <svg className="h-full w-full">
+                    <filter id="noiseFilter">
+                        <feTurbulence
+                            type="fractalNoise"
+                            baseFrequency="0.65"
+                            numOctaves="3"
+                            stitchTiles="stitch"
+                        />
+                    </filter>
+                    <rect width="100%" height="100%" filter="url(#noiseFilter)" />
+                </svg>
             </div>
 
-            {/* Noise Texture */}
-            <div className="fixed inset-0 opacity-[0.015] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat" />
+            {/* Subtle Gradient Overlay */}
+            <div className="fixed inset-0 pointer-events-none z-0 bg-gradient-to-b from-transparent via-background/20 to-background/40" />
 
-            {/* Gradient Orbs */}
-            <div className="fixed top-0 left-1/4 w-96 h-96 bg-green-500/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="fixed bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+            {/* Micro-Grid Overlay with Center Mask */}
+            <div
+                className="fixed inset-0 pointer-events-none z-0 opacity-[0.15] dark:opacity-[0.2]"
+                style={{
+                    backgroundImage: `linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)`,
+                    backgroundSize: '16px 16px',
+                    maskImage: 'radial-gradient(circle at center, transparent 20%, black 80%)',
+                    WebkitMaskImage: 'radial-gradient(circle at center, transparent 20%, black 80%)'
+                }}
+            />
 
-            <div className="relative z-10">
-                <motion.section
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1.2 }}
-                    className="flex flex-col items-center px-6 pt-32 pb-20"
+            {/* Navigation Dock */}
+            <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+                <ExpandableTabs
+                    tabs={tabs}
+                    onChange={handleTabChange}
+                    activeColor="text-green-500 dark:text-green-400"
+                    className="bg-background/80 border-border backdrop-blur-xl shadow-2xl shadow-green-500/10 rounded-2xl"
+                />
+            </div>
+
+            {/* Main Container */}
+            <div className="relative z-10 max-w-2xl mx-auto px-6 py-12 pb-32">
+
+                {/* Header Section */}
+                <motion.header
+                    id="top"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="mb-6"
                 >
-                    <div className="max-w-3xl w-full">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3, duration: 0.8 }}
-                            className="mb-4"
-                        >
-                            <span className="text-green-400 font-mono text-sm">~/portfolio</span>
-                        </motion.div>
+                    {/* Profile Row */}
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500/20 to-blue-500/20 border border-border flex items-center justify-center">
+                            <span className="text-2xl font-bold text-green-500 dark:text-green-400">A</span>
+                        </div>
+                        <div>
+                            <h1 className="text-xl font-semibold tracking-tight">Aryan Balodi</h1>
+                            <p className="text-sm text-muted-foreground font-mono">[aryan-balodi]</p>
+                        </div>
+                    </div>
 
-                        <motion.h1
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4, duration: 0.8 }}
-                            className="text-5xl md:text-7xl font-bold mb-6 tracking-tight"
-                        >
-                            Aryan <span className="text-green-400">Balodi</span>
-                        </motion.h1>
+                    {/* Bio */}
+                    <div className="border-t border-border pt-6">
+                        <p className="text-sm text-muted-foreground/80 leading-relaxed mb-3">
+                            I build CLI tools and web/backend apps. I like software that's fast, focused, and doesn't waste your time.
+                        </p>
+                        <p className="text-sm text-muted-foreground/60 mb-4">
+                            Currently crafting robust systems in TypeScript and Rust
+                        </p>
 
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.5, duration: 0.8 }}
-                            className="text-base md:text-lg text-gray-400 mb-8 max-w-2xl font-light"
-                        >
-                            Building scalable, high-performance web interfaces with modern technologies.
-                            Focused on clean code, exceptional UX, and pixel-perfect execution.
-                        </motion.p>
+                        {/* Status Badge */}
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-green-600 dark:text-green-400 bg-green-500/10 border border-green-500/20 rounded">
+                            <span className="w-1.5 h-1.5 bg-green-600 dark:bg-green-400 rounded-full animate-pulse" />
+                            Open to work
+                        </div>
+                    </div>
+                </motion.header>
 
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.6, duration: 0.8 }}
-                            className="flex gap-3 flex-wrap mb-12"
-                        >
-                            {["TypeScript", "React", "Next.js", "Rust", "AWS"].map((tech, i) => (
-                                <span
-                                    key={tech}
-                                    className="px-3 py-1 bg-white/5 border border-white/10 rounded-md text-xs font-mono text-gray-300 hover:border-green-400/50 hover:text-green-400 transition-all duration-300"
-                                >
-                                    {tech}
-                                </span>
-                            ))}
-                        </motion.div>
+                <BinaryDivider />
 
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.7, duration: 0.8 }}
-                            className="flex gap-4"
-                        >
-                            <a
-                                href="mailto:hello@example.com"
-                                className="group flex items-center gap-2 px-5 py-2.5 bg-green-400/10 border border-green-400/20 rounded-lg text-sm font-medium text-green-400 hover:bg-green-400/20 transition-all duration-300"
+                {/* Experience Section */}
+                <motion.section
+                    id="experience"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                    className="mb-6"
+                >
+                    <div className="flex items-baseline gap-2 mb-4">
+                        <h2 className="text-lg font-medium">experience</h2>
+                        <span className="text-xs text-gray-500 font-mono">({experiences.length})</span>
+                    </div>
+
+                    <div className="space-y-6">
+                        {experiences.map((exp, index) => (
+                            <motion.div
+                                key={exp.company}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.4, delay: 0.15 + index * 0.1 }}
+                                className="relative pl-4 border-l border-border"
                             >
-                                <Mail size={16} />
-                                Get in touch
-                                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                            </a>
-                            <a
-                                href="https://github.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="group flex items-center gap-2 px-5 py-2.5 border border-white/10 rounded-lg text-sm font-medium text-gray-300 hover:border-white/20 hover:text-white transition-all duration-300"
-                            >
-                                <Github size={16} />
-                                GitHub
-                                <ExternalLink size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                            </a>
-                        </motion.div>
+                                <div className="flex items-start justify-between mb-1">
+                                    <div>
+                                        <h3 className="text-sm font-medium text-green-600 dark:text-green-400">
+                                            {exp.role}
+                                        </h3>
+                                        <p className="text-xs font-semibold">{exp.company}</p>
+                                    </div>
+                                    <span className="text-[10px] font-mono text-muted-foreground/50">{exp.period}</span>
+                                </div>
+                                <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
+                                    {exp.description}
+                                </p>
+                                <div className="flex flex-wrap gap-1.5">
+                                    {exp.tech.map((tech) => (
+                                        <span
+                                            key={tech}
+                                            className="px-2 py-0.5 text-[10px] font-mono text-muted-foreground/70 bg-muted/30 border border-border/50 rounded"
+                                        >
+                                            {tech}
+                                        </span>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        ))}
                     </div>
                 </motion.section>
 
+                <BinaryDivider />
+
                 {/* Projects Section */}
-                <section className="py-24 px-6">
-                    <div className="max-w-3xl mx-auto">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.6 }}
-                            className="mb-16"
-                        >
-                            <h2 className="text-3xl md:text-4xl font-bold mb-3">
-                                Selected <span className="text-green-400">Work</span>
-                            </h2>
-                            <p className="text-sm text-gray-400 font-light">Projects that showcase my approach to problem-solving</p>
-                        </motion.div>
-
-                        <div className="space-y-6">
-                            {projects.map((project, index) => (
-                                <motion.a
-                                    key={project.title}
-                                    href={project.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: index * 0.1, duration: 0.6 }}
-                                    className="group block"
-                                >
-                                    <div className="relative bg-white/[0.02] border border-white/5 rounded-xl p-6 md:p-8 hover:border-green-400/30 hover:bg-white/[0.03] transition-all duration-500">
-                                        <div className="flex flex-col md:flex-row gap-6">
-                                            {/* Project Image */}
-                                            <div className="md:w-48 h-32 rounded-lg overflow-hidden bg-white/5 shrink-0">
-                                                <img
-                                                    src={project.image}
-                                                    alt={project.title}
-                                                    className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500"
-                                                />
-                                            </div>
-
-                                            {/* Project Info */}
-                                            <div className="flex-1 flex flex-col justify-between">
-                                                <div>
-                                                    <div className="flex items-start justify-between mb-3">
-                                                        <h3 className="text-xl font-semibold group-hover:text-green-400 transition-colors">
-                                                            {project.title}
-                                                        </h3>
-                                                        <span className="text-xs text-gray-500 font-mono">{project.year}</span>
-                                                    </div>
-                                                    <p className="text-sm text-gray-400 mb-4 font-light leading-relaxed">
-                                                        {project.description}
-                                                    </p>
-                                                </div>
-                                                <div className="flex flex-wrap gap-2">
-                                                    {project.tech.map((tech) => (
-                                                        <span
-                                                            key={tech}
-                                                            className="text-xs px-2 py-1 bg-white/5 border border-white/10 rounded font-mono text-gray-400"
-                                                        >
-                                                            {tech}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            {/* Arrow Icon */}
-                                            <div className="hidden md:flex items-center">
-                                                <ArrowUpRight
-                                                    size={20}
-                                                    className="text-gray-600 group-hover:text-green-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </motion.a>
-                            ))}
-                        </div>
+                <motion.section
+                    id="projects"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                    className="mb-6"
+                >
+                    <div className="flex items-baseline gap-2 mb-4">
+                        <h2 className="text-lg font-medium">projects</h2>
+                        <span className="text-xs text-gray-500 font-mono">({projects.length})</span>
                     </div>
-                </section>
+
+                    <div className="space-y-4">
+                        {projects.map((project, index) => (
+                            <motion.a
+                                key={project.title}
+                                href={project.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.4, delay: 0.1 + index * 0.05 }}
+                                className="group block"
+                            >
+                                <div className="p-4 border border-border rounded-lg hover:border-green-500/50 hover:bg-muted/50 transition-all">
+                                    {/* Title Row */}
+                                    <div className="flex items-start justify-between mb-2">
+                                        <div className="flex items-center gap-2">
+                                            <h3 className="text-sm font-medium group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                                                {project.title}
+                                            </h3>
+                                            {project.featured && (
+                                                <span className="px-1.5 py-0.5 text-[10px] font-medium text-blue-600 dark:text-blue-400 bg-blue-500/10 border border-blue-500/20 rounded">
+                                                    featured
+                                                </span>
+                                            )}
+                                        </div>
+                                        <ExternalLink size={12} className="text-muted-foreground/40 group-hover:text-muted-foreground transition-colors" />
+                                    </div>
+
+                                    {/* Description */}
+                                    <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
+                                        {project.description}
+                                    </p>
+
+                                    {/* Tags and Date */}
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {project.tech.map((tech) => (
+                                                <span
+                                                    key={tech}
+                                                    className="px-2 py-0.5 text-[10px] font-mono text-muted-foreground bg-muted border border-border rounded"
+                                                >
+                                                    {tech}
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <span className="text-[10px] font-mono text-muted-foreground/50">{project.date}</span>
+                                    </div>
+                                </div>
+                            </motion.a>
+                        ))}
+                    </div>
+                </motion.section>
+
+                <BinaryDivider />
 
                 {/* Contact Section */}
-                <section className="py-24 px-6 border-t border-white/5">
-                    <div className="max-w-3xl mx-auto text-center">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.6 }}
-                        >
-                            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                                Let's <span className="text-green-400">Connect</span>
-                            </h2>
-                            <p className="text-sm text-gray-400 mb-12 font-light">
-                                Open to new opportunities and collaborations
-                            </p>
-                            <div className="flex gap-4 justify-center flex-wrap">
-                                <a
-                                    href="mailto:hello@example.com"
-                                    className="group flex items-center gap-2 px-6 py-3 bg-green-400/10 border border-green-400/20 rounded-lg text-sm font-medium text-green-400 hover:bg-green-400/20 transition-all duration-300"
-                                >
-                                    <Mail size={18} />
-                                    hello@example.com
-                                    <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                                </a>
-                                <a
-                                    href="https://github.com"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="group flex items-center gap-2 px-6 py-3 border border-white/10 rounded-lg text-sm font-medium text-gray-300 hover:border-white/20 hover:text-white transition-all duration-300"
-                                >
-                                    <Github size={18} />
-                                    @balodi
-                                    <ExternalLink size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                                </a>
-                            </div>
-                        </motion.div>
+                <motion.section
+                    id="contact"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="pt-2"
+                >
+                    <div className="flex items-center gap-2 mb-4">
+                        <h2 className="text-sm font-medium">contact</h2>
                     </div>
-                </section>
+                    <a
+                        href="mailto:hello@example.com"
+                        className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                    >
+                        <Mail size={14} />
+                        hello@example.com
+                        <ExternalLink size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </a>
+                </motion.section>
+
+                <BinaryDivider className="mt-6 mb-4" />
 
                 {/* Footer */}
-                <footer className="py-8 px-6 border-t border-white/5">
-                    <div className="max-w-3xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-                        <p className="text-xs text-gray-500 font-mono">© 2025 Aryan Balodi</p>
-                        <p className="text-xs text-gray-600 font-light">Designed & built with Next.js</p>
-                    </div>
+                <footer className="mt-8">
+                    <p className="text-[10px] text-muted-foreground/50 font-mono text-center">
+                        © 2025 · built with next.js
+                    </p>
                 </footer>
             </div>
         </div>
