@@ -1,4 +1,5 @@
 import { ReactNode, Dispatch, SetStateAction } from "react";
+import { TerminalTypewriter } from "@/components/Terminal/TerminalTypewriter";
 import { ProjectCard } from "@/components/Terminal/ProjectCard";
 import { FILE_SYSTEM, FileSystemNode } from "./fileSystem";
 
@@ -10,9 +11,11 @@ export type CommandResponse = {
 export type CommandContext = {
     cwd: string;
     setCwd: Dispatch<SetStateAction<string>>;
+    onExit?: () => void;
 };
 
-// Helper to resolve path
+// ... (imports and helper functions remain, but we need to import TerminalTypewriter at the top)
+
 const resolvePath = (cwd: string, target: string): string => {
     if (target === "~" || target === "") return "~";
     if (target === "..") {
@@ -45,50 +48,15 @@ const getNode = (path: string): FileSystemNode | null => {
 export const COMMANDS: Record<string, (args: string[], context: CommandContext) => CommandResponse> = {
     help: () => ({
         output: (
-            <div className="space-y-4 text-sm mt-2">
+            <div className="space-y-2 text-sm mt-2">
                 <p className="text-ide-gray w-full border-b border-white/10 pb-2">Available capabilities:</p>
-                <div className="grid grid-cols-1 gap-y-2">
-                    <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
-                        <span className="text-ide-accent font-bold min-w-[80px]">ls</span>
-                        <span className="text-ide-gray text-xs md:text-sm">- List directory contents</span>
-                    </div>
-                    <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
-                        <span className="text-ide-accent font-bold min-w-[80px]">cd</span>
-                        <span className="text-ide-gray text-xs md:text-sm">- Change directory</span>
-                    </div>
-                    <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
-                        <span className="text-ide-accent font-bold min-w-[80px]">cat</span>
-                        <span className="text-ide-gray text-xs md:text-sm">- Read file content</span>
-                    </div>
-                    <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
-                        <span className="text-ide-accent font-bold min-w-[80px]">open</span>
-                        <span className="text-ide-gray text-xs md:text-sm">- Open/view file (alias for cat)</span>
-                    </div>
-
-                    <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
-                        <span className="text-ide-accent font-bold min-w-[80px]">projects</span>
-                        <span className="text-ide-gray text-xs md:text-sm">- List all projects</span>
-                    </div>
-                    <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
-                        <span className="text-ide-accent font-bold min-w-[80px]">contact</span>
-                        <span className="text-ide-gray text-xs md:text-sm">- View contact information</span>
-                    </div>
-                    <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
-                        <span className="text-ide-accent font-bold min-w-[80px]">sudo</span>
-                        <span className="text-ide-gray text-xs md:text-sm">- Attempt superuser access</span>
-                    </div>
-                    <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
-                        <span className="text-ide-accent font-bold min-w-[80px]">rm</span>
-                        <span className="text-ide-gray text-xs md:text-sm">- Remove files (read-only mode)</span>
-                    </div>
-                    <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
-                        <span className="text-ide-accent font-bold min-w-[80px]">exit</span>
-                        <span className="text-ide-gray text-xs md:text-sm">- Exit terminal session</span>
-                    </div>
-                    <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
-                        <span className="text-ide-accent font-bold min-w-[80px]">clear</span>
-                        <span className="text-ide-gray text-xs md:text-sm">- Clear terminal buffer</span>
-                    </div>
+                <div className="flex flex-wrap gap-6 md:gap-10 w-fit">
+                    <span className="text-ide-accent font-bold">ls</span>
+                    <span className="text-ide-accent font-bold">cd</span>
+                    <span className="text-ide-accent font-bold">cat</span>
+                    <span className="text-ide-accent font-bold">projects</span>
+                    <span className="text-ide-accent font-bold">exit</span>
+                    <span className="text-ide-accent font-bold">clear</span>
                 </div>
             </div>
         ),
@@ -139,8 +107,28 @@ export const COMMANDS: Record<string, (args: string[], context: CommandContext) 
         if (!args[0]) return { output: <span className="text-red-400">Usage: cat &lt;filename&gt;</span> };
 
         const target = args[0];
-        // simple resolution for current dir files
-        // NOTE: Does not fully support paths in cat for now, just filename in current dir
+
+        // Special handling for resume download
+        if (target.toLowerCase() === "resume.pdf") {
+            // Trigger download
+            const link = document.createElement("a");
+            link.href = "/resume.pdf";
+            link.download = "Aryan_Balodi_Resume.pdf";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            return {
+                output: (
+                    <span className="text-green-400">
+                        Downloading resume...
+                        <br />
+                        <span className="text-ide-gray text-xs">If download doesn't start, check pop-up blocker.</span>
+                    </span>
+                )
+            };
+        }
+
         const node = getNode(cwd);
 
         if (!node || node.type !== "dir") return { output: <span className="text-red-400">Error reading directory</span> };
@@ -156,35 +144,18 @@ export const COMMANDS: Record<string, (args: string[], context: CommandContext) 
 
         return { output: fileNode.content };
     },
-    // Keep legacy commands for direct access if needed, or alias them
 
     projects: () => COMMANDS.ls([], { cwd: "~/projects", setCwd: () => { } }),
-    contact: () => COMMANDS.cat(["contact.txt"], { cwd: "~", setCwd: () => { } }),
-    open: (args, context) => COMMANDS.cat(args, context),
 
-    sudo: () => ({
-        output: <span className="text-red-500 font-bold">Permission denied: You are not root (user is 'guest').</span>
-    }),
-
-    rm: (args) => {
-        if (args.includes("-rf") || args.includes("/")) {
-            return {
-                output: <span className="text-red-500 font-bold">Nice try! This file system is read-only for your safety.</span>
-            };
-        }
-        return {
-            output: <span className="text-red-400">Error: File system is read-only.</span>
-        };
-    },
-
-    exit: () => ({
+    exit: (_args, { onExit }) => ({
         output: (
-            <div className="text-ide-gray">
-                <p>Exiting terminal session...</p>
-                <p className="text-xs mt-2">Goodbye! 👋</p>
+            <div className="text-green-500 dark:text-green-400">
+                <TerminalTypewriter
+                    text="Ending terminal session..."
+                    onComplete={onExit}
+                />
             </div>
         ),
-        action: "EXIT",
     }),
 
     clear: () => ({

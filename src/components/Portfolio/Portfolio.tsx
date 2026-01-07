@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Mail, ExternalLink, Linkedin, Twitter, Home, FolderCode, User, Sun, Moon } from "lucide-react";
+import { Github, Mail, ExternalLink, Linkedin, Twitter, Home, FolderCode, User, Sun, Moon, FileUser } from "lucide-react";
 import { SimpleDock } from "@/components/ui/simple-dock";
 import { TypewriterText } from "@/components/TypewriterText";
 import { LastUpdated } from "@/components/LastUpdated";
@@ -35,7 +35,7 @@ const projects = [
     },
     {
         title: "Sync-Space",
-        description: "A web app that streamlines campus scheduling and resource management with real-time updates and role-based access control. ",
+        description: "A web app that streamlines campus scheduling and resource management with real-time updates and role-based access control.",
         tech: ["next.js", "supabase", "tailwindcss", "typescript"],
         link: "https://github.com/aryan-balodi/sync-space",
         date: "dec 2024"
@@ -116,7 +116,7 @@ export const Portfolio = () => {
 
     const tabs: any[] = [
         { title: "Home", icon: Home },
-        { title: "Contact", icon: Mail },
+        { title: "Resume", icon: FileUser, action: "downloadResume" },
         { type: "separator" },
         { title: "Github", icon: Github, link: "https://github.com/aryan-balodi" },
         { title: "LinkedIn", icon: Linkedin, link: "https://www.linkedin.com/in/aryanbalodi/" },
@@ -135,6 +135,16 @@ export const Portfolio = () => {
             return;
         }
 
+        if (tab.action === "downloadResume") {
+            const link = document.createElement("a");
+            link.href = "/resume.pdf";
+            link.download = "Aryan_Balodi_Resume.pdf";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            return;
+        }
+
         if (tab.link) {
             window.open(tab.link, "_blank", "noopener,noreferrer");
             return;
@@ -142,7 +152,6 @@ export const Portfolio = () => {
 
         const sectionMap: { [key: string]: string } = {
             "Home": "top",
-            "Contact": "contact"
         };
 
         const sectionId = sectionMap[tab.title];
@@ -216,8 +225,18 @@ export const Portfolio = () => {
                                 className="text-lg text-muted-foreground"
                             />
                         </div>
-                        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-green-500/20 to-blue-500/20 border border-border flex items-center justify-center flex-shrink-0">
-                            <span className="text-4xl font-bold text-green-500 dark:text-green-400">A</span>
+                        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-green-500/20 to-blue-500/20 border border-border flex items-center justify-center flex-shrink-0 overflow-hidden relative">
+                            <span className="text-4xl font-bold text-green-500 dark:text-green-400 absolute fallback-text">A</span>
+                            <img
+                                src="/me.jpg"
+                                alt="Aryan Balodi"
+                                className="w-full h-full object-cover relative z-10 scale-100"
+                                style={{ objectPosition: ' 0% -60%' }}
+                                onError={(e) => {
+                                    // Fallback if image not found
+                                    e.currentTarget.style.display = 'none';
+                                }}
+                            />
                         </div>
                     </div>
 

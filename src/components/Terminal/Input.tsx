@@ -6,8 +6,9 @@ interface InputProps {
     cwd: string;
 }
 
-export const Input = ({ onSubmit, cwd }: InputProps) => {
+export const Input = ({ onSubmit, cwd, history = [] }: { onSubmit: (cmd: string) => void; cwd: string; history?: string[] }) => {
     const [value, setValue] = useState("");
+    const [historyIndex, setHistoryIndex] = useState<number | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -21,6 +22,7 @@ export const Input = ({ onSubmit, cwd }: InputProps) => {
         e.preventDefault();
         onSubmit(value);
         setValue("");
+        setHistoryIndex(null);
     };
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -28,6 +30,25 @@ export const Input = ({ onSubmit, cwd }: InputProps) => {
             e.preventDefault();
             const completed = autoComplete(value, cwd);
             setValue(completed);
+        } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            if (history.length === 0) return;
+
+            const newIndex = historyIndex === null ? history.length - 1 : Math.max(0, historyIndex - 1);
+            setHistoryIndex(newIndex);
+            setValue(history[newIndex]);
+        } else if (e.key === "ArrowDown") {
+            e.preventDefault();
+            if (history.length === 0 || historyIndex === null) return;
+
+            const newIndex = historyIndex + 1;
+            if (newIndex >= history.length) {
+                setHistoryIndex(null);
+                setValue("");
+            } else {
+                setHistoryIndex(newIndex);
+                setValue(history[newIndex]);
+            }
         }
     };
 
@@ -41,7 +62,12 @@ export const Input = ({ onSubmit, cwd }: InputProps) => {
                 ref={inputRef}
                 type="text"
                 value={value}
-                onChange={(e) => setValue(e.target.value)}
+                onChange={(e) => {
+                    setValue(e.target.value);
+                    // Reset history index if user types manually, 
+                    // or keep it? behavior varies. Resetting usually safer to avoid confusion.
+                    // But standard terminal sometimes preserves it? Let's reset if value changes differently.
+                }}
                 onKeyDown={handleKeyDown}
                 className="bg-transparent border-none outline-none flex-1 font-mono text-ide-white caret-ide-accent pl-1 placeholder-ide-gray/30"
                 autoFocus

@@ -24,7 +24,7 @@ export const useTerminal = (onExit?: () => void) => {
         const executionCwd = cwd;
 
         if (commandFn) {
-            const response = commandFn(args, { cwd, setCwd });
+            const response = commandFn(args, { cwd, setCwd, onExit });
             if (response.action === "CLEAR") {
                 setHistory([]);
             } else if (response.action === "EXIT") {

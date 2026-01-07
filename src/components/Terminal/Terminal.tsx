@@ -80,7 +80,7 @@ const TerminalContent = ({ onExit }: TerminalContentProps) => {
                 </div>
 
                 <History history={history} />
-                <Input onSubmit={executeCommand} cwd={cwd} />
+                <Input onSubmit={executeCommand} cwd={cwd} history={history.map(h => h.command)} />
 
                 <div ref={bottomRef} />
             </div>
