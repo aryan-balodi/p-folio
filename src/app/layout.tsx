@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Terminal Portfolio",
+  title: "Aryan Balodi",
   description: "Interactive CLI Portfolio",
 };
 

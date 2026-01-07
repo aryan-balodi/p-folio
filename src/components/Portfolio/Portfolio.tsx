@@ -2,47 +2,49 @@
 
 import { motion } from "framer-motion";
 import { Github, Mail, ExternalLink, Linkedin, Twitter, Home, FolderCode, User, Sun, Moon } from "lucide-react";
-import { ExpandableTabs } from "@/components/ui/expandable-tabs";
+import { SimpleDock } from "@/components/ui/simple-dock";
+import { TypewriterText } from "@/components/TypewriterText";
+import { LastUpdated } from "@/components/LastUpdated";
 import { useState, useEffect } from "react";
 
 const experiences = [
     {
-        company: "Quantum Systems",
-        role: "Senior Systems Engineer",
-        period: "2023 - Present",
-        description: "Architecting distributed microservices and optimizing high-throughput data pipelines using Rust and Kubernetes.",
-        tech: ["rust", "grpc", "k8s", "redis"]
+        company: "Tenacio",
+        role: "AI Engineer Intern",
+        period: "Jun'25 - Aug'25",
+        description: "Designed and built a conversational agent to interact with users and help them select the fintech services and vendors best suited to their priorities.",
+        tech: ["python", "rag", "propmt-engineering", "chromadb"]
     },
     {
-        company: "Stellar Labs",
-        role: "Full Stack Developer",
-        period: "2021 - 2023",
-        description: "Developed collaborative real-time editing tools and improved frontend performance by 40%.",
-        tech: ["next.js", "typescript", "websocket", "postgresql"]
+        company: "NetAI",
+        role: "AI Engineer Intern",
+        period: "Jun'24 - Aug'24",
+        description: "Developed the backend of a chatbot for a NMS product portal aimed to answer user queries about networking FAQs and their real time data.",
+        tech: ["python", "rag", "llama-index", "hugging-face"]
     }
 ];
 
 const projects = [
     {
-        title: "CLI Portfolio",
-        description: "A high-performance, terminal-emulated portfolio website built with Next.js 14, Framer Motion, and Tailwind CSS.",
-        tech: ["react", "next.js", "typescript", "tailwind"],
-        link: "https://github.com/balodi/portfolio-latest",
-        date: "jan 2025",
+        title: "Cold DM Agent",
+        description: "Generates personalised messages from comments data and automates sending (for Instagram), acting as a lightweight CRM-style tool for top-of-funnel leads.",
+        tech: ["python", "instagrapi", "cli-script", "automation"],
+        link: "https://github.com/aryan-balodi/Cold-DM-Agent",
+        date: "july 2025",
         featured: true
     },
     {
-        title: "Neural Net Viz",
-        description: "Interactive 3D visualization of neural network training processes.",
-        tech: ["d3.js", "three.js", "python", "tensorflow"],
-        link: "https://github.com/balodi",
+        title: "Sync-Space",
+        description: "A web app that streamlines campus scheduling and resource management with real-time updates and role-based access control. ",
+        tech: ["next.js", "supabase", "tailwindcss", "typescript"],
+        link: "https://github.com/aryan-balodi/sync-space",
         date: "dec 2024"
     },
     {
-        title: "E-Commerce Engine",
-        description: "Headless e-commerce backend built with Rust and Rocket.",
-        tech: ["rust", "postgresql", "redis", "docker"],
-        link: "https://github.com/balodi",
+        title: "CLI-Portfolio",
+        description: "A terminal-style portfolio that lets visitors explore my work and experience through an interactive CLI interface, blending developer tooling aesthetics with a personal site.",
+        tech: ["next.js", "typescript", "tailwindcss"],
+        link: "https://github.com/aryan-balodi/p-folio",
         date: "aug 2023"
     }
 ];
@@ -116,8 +118,8 @@ export const Portfolio = () => {
         { title: "Home", icon: Home },
         { title: "Contact", icon: Mail },
         { type: "separator" },
-        { title: "Github", icon: Github, link: "https://github.com" },
-        { title: "LinkedIn", icon: Linkedin, link: "https://linkedin.com" },
+        { title: "Github", icon: Github, link: "https://github.com/aryan-balodi" },
+        { title: "LinkedIn", icon: Linkedin, link: "https://www.linkedin.com/in/aryanbalodi/" },
         { type: "separator" },
         { title: isDarkMode ? "Light Mode" : "Dark Mode", icon: isDarkMode ? Sun : Moon, action: "toggleTheme" },
     ];
@@ -145,11 +147,11 @@ export const Portfolio = () => {
 
         const sectionId = sectionMap[tab.title];
 
-        if (sectionId === 'top') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else if (sectionId) {
+        if (sectionId) {
             const element = document.getElementById(sectionId);
-            element?.scrollIntoView({ behavior: 'smooth' });
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
     };
 
@@ -186,7 +188,7 @@ export const Portfolio = () => {
 
             {/* Navigation Dock */}
             <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
-                <ExpandableTabs
+                <SimpleDock
                     tabs={tabs}
                     onChange={handleTabChange}
                     activeColor="text-green-500 dark:text-green-400"
@@ -195,7 +197,7 @@ export const Portfolio = () => {
             </div>
 
             {/* Main Container */}
-            <div className="relative z-10 max-w-2xl mx-auto px-6 py-12 pb-32">
+            <div className="relative z-10 max-w-2xl mx-auto px-6 pt-24 pb-32">
 
                 {/* Header Section */}
                 <motion.header
@@ -203,33 +205,37 @@ export const Portfolio = () => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="mb-6"
+                    className="mb-8"
                 >
-                    {/* Profile Row */}
-                    <div className="flex items-center gap-4 mb-4">
-                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500/20 to-blue-500/20 border border-border flex items-center justify-center">
-                            <span className="text-2xl font-bold text-green-500 dark:text-green-400">A</span>
+                    {/* Profile Row - Avatar on right */}
+                    <div className="flex items-center justify-between mb-15">
+                        <div className="flex flex-col justify-center pt-2">
+                            <h1 className="text-4xl font-bold tracking-tight mb-1.5">Aryan Balodi</h1>
+                            <TypewriterText
+                                words={["Backend Developer", "AI Engineer", "Product-Focused Dev", "Open Source Enthusiast"]}
+                                className="text-lg text-muted-foreground"
+                            />
                         </div>
-                        <div>
-                            <h1 className="text-xl font-semibold tracking-tight">Aryan Balodi</h1>
-                            <p className="text-sm text-muted-foreground font-mono">[aryan-balodi]</p>
+                        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-green-500/20 to-blue-500/20 border border-border flex items-center justify-center flex-shrink-0">
+                            <span className="text-4xl font-bold text-green-500 dark:text-green-400">A</span>
                         </div>
                     </div>
 
-                    {/* Bio */}
-                    <div className="border-t border-border pt-6">
-                        <p className="text-sm text-muted-foreground/80 leading-relaxed mb-3">
-                            I build CLI tools and web/backend apps. I like software that's fast, focused, and doesn't waste your time.
-                        </p>
-                        <p className="text-sm text-muted-foreground/60 mb-4">
-                            Currently crafting robust systems in TypeScript and Rust
-                        </p>
+                    {/* Status Badge - between heading and bio */}
+                    <div className="flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-green-600 dark:text-green-400 bg-green-500/10 border border-green-500/20 rounded w-full mb-5 pr-6">
+                        <span className="w-2 h-2 bg-green-600 dark:bg-green-400 rounded-full animate-pulse" />
+                        Available - Open to collaborate and build real-world products.
+                    </div>
 
-                        {/* Status Badge */}
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-green-600 dark:text-green-400 bg-green-500/10 border border-green-500/20 rounded">
-                            <span className="w-1.5 h-1.5 bg-green-600 dark:bg-green-400 rounded-full animate-pulse" />
-                            Open to work
-                        </div>
+                    {/* Bio - pushed further down */}
+                    <div className="pt-6">
+                        <h2 className="text-xl font-medium mb-2">About</h2>
+                        <p className="text-base text-muted-foreground/80 leading-relaxed mb-5">
+                            Backend and AI engineer focused on building systems that solve real-world problems, with a strong interest in finance and a bias toward ownership, clarity, and impact. Open to collaborations and freelance projects.
+                        </p>
+                        <p className="text-base text-muted-foreground/60">
+                            Currently exploring OSS.
+                        </p>
                     </div>
                 </motion.header>
 
@@ -244,8 +250,8 @@ export const Portfolio = () => {
                     className="mb-6"
                 >
                     <div className="flex items-baseline gap-2 mb-4">
-                        <h2 className="text-lg font-medium">experience</h2>
-                        <span className="text-xs text-gray-500 font-mono">({experiences.length})</span>
+                        <h2 className="text-xl font-medium">Experience</h2>
+                        <span className="text-sm text-gray-500 font-mono">({experiences.length})</span>
                     </div>
 
                     <div className="space-y-6">
@@ -259,21 +265,21 @@ export const Portfolio = () => {
                             >
                                 <div className="flex items-start justify-between mb-1">
                                     <div>
-                                        <h3 className="text-sm font-medium text-green-600 dark:text-green-400">
+                                        <h3 className="text-lg font-medium text-green-600 dark:text-green-400">
                                             {exp.role}
                                         </h3>
-                                        <p className="text-xs font-semibold">{exp.company}</p>
+                                        <p className="text-sm font-semibold">{exp.company}</p>
                                     </div>
                                     <span className="text-[10px] font-mono text-muted-foreground/50">{exp.period}</span>
                                 </div>
-                                <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
+                                <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
                                     {exp.description}
                                 </p>
                                 <div className="flex flex-wrap gap-1.5">
                                     {exp.tech.map((tech) => (
                                         <span
                                             key={tech}
-                                            className="px-2 py-0.5 text-[10px] font-mono text-muted-foreground/70 bg-muted/30 border border-border/50 rounded"
+                                            className="px-2 py-0.5 text-xs font-mono text-muted-foreground/70 bg-muted/30 border border-border/50 rounded"
                                         >
                                             {tech}
                                         </span>
@@ -295,8 +301,8 @@ export const Portfolio = () => {
                     className="mb-6"
                 >
                     <div className="flex items-baseline gap-2 mb-4">
-                        <h2 className="text-lg font-medium">projects</h2>
-                        <span className="text-xs text-gray-500 font-mono">({projects.length})</span>
+                        <h2 className="text-xl font-medium">Projects</h2>
+                        <span className="text-sm text-gray-500 font-mono">({projects.length})</span>
                     </div>
 
                     <div className="space-y-4">
@@ -315,11 +321,11 @@ export const Portfolio = () => {
                                     {/* Title Row */}
                                     <div className="flex items-start justify-between mb-2">
                                         <div className="flex items-center gap-2">
-                                            <h3 className="text-sm font-medium group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                                            <h3 className="text-base font-medium group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
                                                 {project.title}
                                             </h3>
                                             {project.featured && (
-                                                <span className="px-1.5 py-0.5 text-[10px] font-medium text-blue-600 dark:text-blue-400 bg-blue-500/10 border border-blue-500/20 rounded">
+                                                <span className="px-1.5 py-0.5 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-500/10 border border-blue-500/20 rounded">
                                                     featured
                                                 </span>
                                             )}
@@ -328,7 +334,7 @@ export const Portfolio = () => {
                                     </div>
 
                                     {/* Description */}
-                                    <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
+                                    <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
                                         {project.description}
                                     </p>
 
@@ -338,13 +344,13 @@ export const Portfolio = () => {
                                             {project.tech.map((tech) => (
                                                 <span
                                                     key={tech}
-                                                    className="px-2 py-0.5 text-[10px] font-mono text-muted-foreground bg-muted border border-border rounded"
+                                                    className="px-2 py-0.5 text-xs font-mono text-muted-foreground bg-muted border border-border rounded"
                                                 >
                                                     {tech}
                                                 </span>
                                             ))}
                                         </div>
-                                        <span className="text-[10px] font-mono text-muted-foreground/50">{project.date}</span>
+                                        <span className="text-xs font-mono text-muted-foreground/50">{project.date}</span>
                                     </div>
                                 </div>
                             </motion.a>
@@ -363,24 +369,25 @@ export const Portfolio = () => {
                     className="pt-2"
                 >
                     <div className="flex items-center gap-2 mb-4">
-                        <h2 className="text-sm font-medium">contact</h2>
+                        <h2 className="text-xl font-medium">contact</h2>
                     </div>
                     <a
-                        href="mailto:hello@example.com"
-                        className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                        href="mailto:balodiaryan5@gmail.com"
+                        className="group flex items-center gap-2 text-base text-muted-foreground hover:text-green-600 dark:hover:text-green-400 transition-colors"
                     >
-                        <Mail size={14} />
-                        hello@example.com
-                        <ExternalLink size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <Mail size={16} />
+                        balodiaryan5@gmail.com
+                        <ExternalLink size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                     </a>
                 </motion.section>
 
                 <BinaryDivider className="mt-6 mb-4" />
 
                 {/* Footer */}
-                <footer className="mt-8">
-                    <p className="text-[10px] text-muted-foreground/50 font-mono text-center">
-                        © 2025 · built with next.js
+                <footer className="mt-8 flex items-center justify-between">
+                    <LastUpdated />
+                    <p className="text-xs text-muted-foreground/50 font-mono text-right">
+                        © 2026 Aryan Balodi
                     </p>
                 </footer>
             </div>
