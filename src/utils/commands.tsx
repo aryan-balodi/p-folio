@@ -50,7 +50,7 @@ export const COMMANDS: Record<string, (args: string[], context: CommandContext) 
         output: (
             <div className="space-y-2 text-sm mt-2">
                 <p className="text-ide-gray w-full border-b border-white/10 pb-2">Available capabilities:</p>
-                <div className="flex flex-wrap gap-6 md:gap-10 w-fit">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 w-full md:w-fit">
                     <span className="text-ide-accent font-bold">ls</span>
                     <span className="text-ide-accent font-bold">cd</span>
                     <span className="text-ide-accent font-bold">cat</span>

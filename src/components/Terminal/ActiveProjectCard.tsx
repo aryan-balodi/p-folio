@@ -18,7 +18,7 @@ export const ActiveProjectCard = () => {
 
             <motion.div
                 layoutId={`card-${activeCard.id}`}
-                className="relative w-[80vw] md:w-[730px] h-[92vh] max-h-[746px] rounded-xl border border-blue-500/50 shadow-2xl overflow-hidden cursor-default pointer-events-auto flex flex-col"
+                className="relative w-[95vw] md:w-[730px] h-[92vh] max-h-[746px] rounded-xl border border-blue-500/50 shadow-2xl overflow-hidden cursor-default pointer-events-auto flex flex-col"
                 // FORCE SOLID BLACK BACKGROUND
                 style={{ backgroundColor: "#050505" }}
                 initial={{ backgroundColor: "#050505" }}

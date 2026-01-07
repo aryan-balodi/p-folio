@@ -196,7 +196,7 @@ export const Portfolio = () => {
             />
 
             {/* Navigation Dock */}
-            <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+            <div className="fixed bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-50">
                 <SimpleDock
                     tabs={tabs}
                     onChange={handleTabChange}
@@ -217,8 +217,8 @@ export const Portfolio = () => {
                     className="mb-8"
                 >
                     {/* Profile Row - Avatar on right */}
-                    <div className="flex items-center justify-between mb-15">
-                        <div className="flex flex-col justify-center pt-2">
+                    <div className="flex flex-col-reverse md:flex-row items-center md:items-start justify-between gap-6 md:gap-0 mb-10 md:mb-15">
+                        <div className="flex flex-col items-center md:items-start justify-center pt-2 text-center md:text-left">
                             <h1 className="text-4xl font-bold tracking-tight mb-1.5">Aryan Balodi</h1>
                             <TypewriterText
                                 words={["Backend Developer", "AI Engineer", "Product-Focused Dev", "Open Source Enthusiast"]}
