@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Aryan Balodi",
-  description: "Interactive CLI Portfolio",
+  description: "Portfolio-website",
 };
 
 export default function RootLayout({
