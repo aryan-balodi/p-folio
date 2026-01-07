@@ -5,7 +5,7 @@ import { Github, Mail, ExternalLink, Linkedin, Twitter, Home, FolderCode, User, 
 import { SimpleDock } from "@/components/ui/simple-dock";
 import { TypewriterText } from "@/components/TypewriterText";
 import { LastUpdated } from "@/components/LastUpdated";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 const experiences = [
     {
@@ -241,9 +241,9 @@ export const Portfolio = () => {
                     </div>
 
                     {/* Status Badge - between heading and bio */}
-                    <div className="flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-green-600 dark:text-green-400 bg-green-500/10 border border-green-500/20 rounded w-full mb-5 text-center">
+                    <div className="flex items-center justify-center gap-x-2 gap-y-1 px-3 py-2 text-sm font-medium text-green-600 dark:text-green-400 bg-green-500/10 border border-green-500/20 rounded w-full mb-5 text-center">
                         <span className="w-2 h-2 bg-green-600 dark:bg-green-400 rounded-full animate-pulse flex-shrink-0" />
-                        <span className="flex-1">Available - Open to collaborate and build real-world products.</span>
+                        <span>Available - Open to collaborate and build real-world products.</span>
                     </div>
 
                     {/* Bio - pushed further down */}
@@ -361,12 +361,17 @@ export const Portfolio = () => {
                                     <div className="flex items-center justify-between">
                                         <div className="flex flex-wrap gap-1.5">
                                             {project.tech.map((tech) => (
-                                                <span
-                                                    key={tech}
-                                                    className="px-2 py-0.5 text-xs font-mono text-muted-foreground bg-muted border border-border rounded"
-                                                >
-                                                    {tech}
-                                                </span>
+                                                <React.Fragment key={tech}>
+                                                    {/* Mobile-only break for Sync-Space tailwindcss tag */}
+                                                    {project.title === "Sync-Space" && tech === "tailwindcss" && (
+                                                        <div className="basis-full h-0 md:hidden" />
+                                                    )}
+                                                    <span
+                                                        className="px-2 py-0.5 text-xs font-mono text-muted-foreground bg-muted border border-border rounded"
+                                                    >
+                                                        {tech}
+                                                    </span>
+                                                </React.Fragment>
                                             ))}
                                         </div>
                                         <span className="text-xs font-mono text-muted-foreground/50">{project.date}</span>
