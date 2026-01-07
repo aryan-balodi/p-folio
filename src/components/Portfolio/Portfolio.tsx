@@ -241,9 +241,9 @@ export const Portfolio = () => {
                     </div>
 
                     {/* Status Badge - between heading and bio */}
-                    <div className="flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-green-600 dark:text-green-400 bg-green-500/10 border border-green-500/20 rounded w-full mb-5 pr-6">
-                        <span className="w-2 h-2 bg-green-600 dark:bg-green-400 rounded-full animate-pulse" />
-                        Available - Open to collaborate and build real-world products.
+                    <div className="flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-green-600 dark:text-green-400 bg-green-500/10 border border-green-500/20 rounded w-full mb-5 text-center">
+                        <span className="w-2 h-2 bg-green-600 dark:bg-green-400 rounded-full animate-pulse flex-shrink-0" />
+                        <span className="flex-1">Available - Open to collaborate and build real-world products.</span>
                     </div>
 
                     {/* Bio - pushed further down */}

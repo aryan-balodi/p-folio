@@ -1,3 +1,4 @@
+import React from "react";
 import { motion } from "framer-motion";
 import { useTerminalInteractive } from "@/context/TerminalInteractiveContext";
 
@@ -77,9 +78,15 @@ export const ActiveProjectCard = () => {
                     <div className="flex justify-between items-center shrink-0 pt-2">
                         <div className="flex flex-wrap gap-2">
                             {activeCard.tech.map((t) => (
-                                <span key={t} className="px-3 py-1 bg-blue-500/10 text-blue-300 text-xs font-medium rounded-full border border-blue-500/20">
-                                    {t}
-                                </span>
+                                <React.Fragment key={t}>
+                                    {/* Mobile-only break for Sync-Space tailwindcss tag */}
+                                    {activeCard.title === "Sync-Space" && t === "tailwindcss" && (
+                                        <div className="basis-full h-0 md:hidden" />
+                                    )}
+                                    <span className="px-3 py-1 bg-blue-500/10 text-blue-300 text-xs font-medium rounded-full border border-blue-500/20">
+                                        {t}
+                                    </span>
+                                </React.Fragment>
                             ))}
                         </div>
 
