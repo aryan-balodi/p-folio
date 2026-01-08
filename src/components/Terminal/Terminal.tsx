@@ -75,9 +75,9 @@ const TerminalContent = ({ onExit }: TerminalContentProps) => {
                 <div className="mb-6 opacity-70">
                     <p>Last login: {new Date().toDateString()} on ttys001</p>
                     <p className="mt-2 text-xs">
-                        Type <span className="text-ide-accent font-bold">help</span> to view available commands
+                        Enter <span className="text-ide-accent font-bold">help</span> to view available commands
                         <span className="text-ide-accent font-bold"> OR </span>
-                        Type <span className="text-ide-accent font-bold">exit</span> to view webpage.
+                        Enter <span className="text-ide-accent font-bold">exit</span> to view webpage.
                     </p>
                 </div>
 
