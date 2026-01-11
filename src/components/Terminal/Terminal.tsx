@@ -42,7 +42,10 @@ const TerminalContent = ({ onExit }: TerminalContentProps) => {
             <div className="relative flex items-center px-5 py-4 shrink-0 z-10">
                 <div className="flex space-x-2 mr-4 group">
                     {/* Close (Red) */}
-                    <div className="w-3 h-3 rounded-full bg-[#FF5F56] border border-black/10 flex items-center justify-center cursor-pointer transition-transform active:scale-95">
+                    <div
+                        onClick={() => executeCommand("exit")}
+                        className="w-3 h-3 rounded-full bg-[#FF5F56] border border-black/10 flex items-center justify-center cursor-pointer transition-transform active:scale-95"
+                    >
                         <svg className="w-2 h-2 text-black/60 opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
                             <path d="M18 6L6 18M6 6l12 12" />
                         </svg>
