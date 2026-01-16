@@ -55,8 +55,9 @@ export const Input = ({ onSubmit, cwd, history = [] }: { onSubmit: (cmd: string)
     return (
         <form onSubmit={handleSubmit} className="flex items-center gap-2 w-full">
             <div className="flex items-center gap-2 shrink-0">
-                <span className="text-green-400 font-bold">➜</span>
+                <span className="text-green-400 font-bold">balodi@portfolio</span>
                 <span className="text-blue-400 font-bold">{cwd}</span>
+                <span className="text-ide-white font-bold">%</span>
             </div>
             <input
                 ref={inputRef}

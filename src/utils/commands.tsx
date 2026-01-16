@@ -162,4 +162,20 @@ export const COMMANDS: Record<string, (args: string[], context: CommandContext) 
         output: null,
         action: "CLEAR",
     }),
+    sudo: () => ({
+        output: (
+            <span className="text-red-400">
+                nice try, but you don’t need root to view projects.
+            </span>
+        ),
+    }),
+    rm: (args) => {
+        const isRf = args.includes("-rf") || (args.includes("-r") && args.includes("-f"));
+
+        if (isRf) {
+            return { output: <span className="text-red-400">warning: rm -rf detected. Relax, this isn’t your production server.</span> };
+        }
+
+        return { output: <span className="text-red-400">nothing to remove. Your mistakes are safe here :)</span> };
+    },
 };
