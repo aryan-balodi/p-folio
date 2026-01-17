@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Mail, ExternalLink, Linkedin, Twitter, Home, FolderCode, User, Sun, Moon, FileUser } from "lucide-react";
+import { Github, Mail, ExternalLink, Linkedin, Home, Sun, Moon, FileUser, LucideIcon } from "lucide-react";
 import { SimpleDock } from "@/components/ui/simple-dock";
 import { TypewriterText } from "@/components/TypewriterText";
 import { LastUpdated } from "@/components/LastUpdated";
@@ -20,7 +20,8 @@ const experiences = [
         role: "AI Engineer Intern",
         period: "Jun'24 - Aug'24",
         description: "Developed the backend of a chatbot for a NMS product portal aimed to answer user queries about networking FAQs and their real time data.",
-        tech: ["python", "rag", "llama-index", "hugging-face"]
+        tech: ["python", "rag", "llama-index", "hugging-face"],
+        link: "https://www.linkedin.com/company/netai-ai/"
     }
 ];
 
@@ -103,6 +104,24 @@ const BinaryDivider = ({ className = "my-2" }: { className?: string }) => (
     </div>
 );
 
+type DockTab = {
+    title: string;
+    icon: LucideIcon;
+    action?: string;
+    link?: string;
+    type?: never;
+};
+
+type DockSeparator = {
+    type: "separator";
+    title?: never;
+    icon?: never;
+    action?: never;
+    link?: never;
+}
+
+type DockItem = DockTab | DockSeparator;
+
 export const Portfolio = () => {
     const [isDarkMode, setIsDarkMode] = useState(true);
 
@@ -114,7 +133,7 @@ export const Portfolio = () => {
         }
     }, [isDarkMode]);
 
-    const tabs: any[] = [
+    const tabs: DockItem[] = [
         { title: "Home", icon: Home },
         { title: "Resume", icon: FileUser, action: "downloadResume" },
         { type: "separator" },
@@ -200,7 +219,6 @@ export const Portfolio = () => {
                 <SimpleDock
                     tabs={tabs}
                     onChange={handleTabChange}
-                    activeColor="text-green-500 dark:text-green-400"
                     className="bg-background/80 border-border backdrop-blur-xl shadow-2xl shadow-green-500/10 rounded-2xl"
                 />
             </div>
@@ -221,7 +239,7 @@ export const Portfolio = () => {
                         <div className="flex flex-col items-center md:items-start justify-center pt-2 text-center md:text-left">
                             <h1 className="text-4xl font-bold tracking-tight mb-1.5">Aryan Balodi</h1>
                             <TypewriterText
-                                words={["Backend Developer", "AI Engineer", "Product-Focused Dev", "Open Source Enthusiast"]}
+                                words={["Backend Developer", "AI Engineer", "Product-Focused Dev", "Web3 Enthusiast"]}
                                 className="text-lg text-muted-foreground"
                             />
                         </div>
@@ -253,7 +271,7 @@ export const Portfolio = () => {
                             Backend and AI engineer focused on building systems that solve real-world problems, with a strong interest in finance and a bias toward ownership, clarity, and impact. Open to collaborations and freelance projects.
                         </p>
                         <p className="text-base text-muted-foreground/60">
-                            Currently exploring OSS.
+                            Currently exploring Web3.
                         </p>
                     </div>
                 </motion.header>
@@ -287,7 +305,12 @@ export const Portfolio = () => {
                                         <h3 className="text-lg font-medium text-green-600 dark:text-green-400">
                                             {exp.role}
                                         </h3>
-                                        <p className="text-sm font-semibold">{exp.company}</p>
+                                        <p
+                                            className={`text-sm font-semibold ${exp.link ? 'cursor-pointer hover:text-green-500 transition-colors' : ''}`}
+                                            onClick={() => exp.link && window.open(exp.link, '_blank')}
+                                        >
+                                            {exp.company}
+                                        </p>
                                     </div>
                                     <span className="text-[10px] font-mono text-muted-foreground/50">{exp.period}</span>
                                 </div>

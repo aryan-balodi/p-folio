@@ -61,7 +61,7 @@ export const useTerminal = (onExit?: () => void) => {
                     command: trimmedCmd,
                     output: (
                         <span className="text-red-500" >
-                            Command not found: {trimmedCmd}.Type 'help' for available commands.
+                            Command not found: {trimmedCmd}.Type &apos;help&apos; for available commands.
                         </span>
                     ),
                     cwd: executionCwd

@@ -1,6 +1,6 @@
 import { ReactNode, Dispatch, SetStateAction } from "react";
 import { TerminalTypewriter } from "@/components/Terminal/TerminalTypewriter";
-import { ProjectCard } from "@/components/Terminal/ProjectCard";
+// import { ProjectCard } from "@/components/Terminal/ProjectCard";
 import { FILE_SYSTEM, FileSystemNode } from "./fileSystem";
 
 export type CommandResponse = {
@@ -123,7 +123,7 @@ export const COMMANDS: Record<string, (args: string[], context: CommandContext) 
                     <span className="text-green-400">
                         Downloading resume...
                         <br />
-                        <span className="text-ide-gray text-xs">If download doesn't start, check pop-up blocker.</span>
+                        <span className="text-ide-gray text-xs">If download doesn&apos;t start, check pop-up blocker.</span>
                     </span>
                 )
             };
@@ -165,7 +165,7 @@ export const COMMANDS: Record<string, (args: string[], context: CommandContext) 
     sudo: () => ({
         output: (
             <span className="text-red-400">
-                nice try, but you don’t need root to view projects.
+                nice try, but you don&apos;t need root to view projects.
             </span>
         ),
     }),

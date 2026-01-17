@@ -5,6 +5,10 @@ interface BootSequenceProps {
     onComplete: () => void;
 }
 
+interface NavigatorWithMemory extends Navigator {
+    deviceMemory?: number;
+}
+
 export const BootSequence = ({ onComplete }: BootSequenceProps) => {
     const [lines, setLines] = useState<string[]>([]);
 
@@ -12,8 +16,7 @@ export const BootSequence = ({ onComplete }: BootSequenceProps) => {
         const userAgent = navigator.userAgent;
         const platform = navigator.platform;
         const cores = navigator.hardwareConcurrency || "Unknown";
-        // @ts-ignore
-        const memory = (navigator as any).deviceMemory || "Unknown";
+        const memory = (navigator as NavigatorWithMemory).deviceMemory || "Unknown";
 
         const dynamicLines = [
             "Initializing environment...",

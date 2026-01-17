@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect, FormEvent, KeyboardEvent } from "react";
 import { autoComplete } from "@/utils/autoComplete";
 
-interface InputProps {
-    onSubmit: (cmd: string) => void;
-    cwd: string;
-}
+// interface InputProps {
+//     onSubmit: (cmd: string) => void;
+//     cwd: string;
+// }
 
 export const Input = ({ onSubmit, cwd, history = [] }: { onSubmit: (cmd: string) => void; cwd: string; history?: string[] }) => {
     const [value, setValue] = useState("");

@@ -3,7 +3,8 @@ import { useId } from "react";
 import { useTerminalInteractive, ProjectData } from "@/context/TerminalInteractiveContext";
 
 // Props match ProjectData but without ID (we generate it)
-interface ProjectCardProps extends Omit<ProjectData, "id"> { }
+// Props match ProjectData but without ID (we generate it)
+type ProjectCardProps = Omit<ProjectData, "id">;
 
 export const ProjectCard = (props: ProjectCardProps) => {
     const id = useId();

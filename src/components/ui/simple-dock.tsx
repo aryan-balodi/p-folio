@@ -24,14 +24,12 @@ type TabItem = Tab | Separator;
 interface SimpleDockProps {
     tabs: TabItem[];
     className?: string;
-    activeColor?: string;
     onChange?: (index: number | null) => void;
 }
 
 export function SimpleDock({
     tabs,
     className,
-    activeColor = "text-primary",
     onChange,
 }: SimpleDockProps) {
     const handleClick = (index: number) => {
